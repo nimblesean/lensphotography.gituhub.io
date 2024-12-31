@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <title>Hasil Pencarian - Lens Photography</title>
+    <style>
+      /* ======================================================
+                VARIABLES & GENERAL CSS
+        =========================================================*/
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        text-decoration: none;
+        list-style: none;
+        resize: none;
+        outline: none;
+        border: none;
+      }
+
+      :root {
+        --color-bg: #030517;
+        --color-text: #e6e3e3;
+        --color-tertiary: rgb(8, 218, 218);
+        --shadow: 6px 6px 12px #06a2ad, -6px -6px 12px #07e1de;
+        --inner-shadow: inset 6px 6px 12px #bababa, inset -6px -6px 12px #ffffff;
+        --width-lg: 80%;
+        --width-sm: 95%;
+        --transition: all 0.4s ease-in;
+      }
+
+      body {
+        font-family: "Rubik", sans-serif;
+        background: var(--color-bg);
+        color: var(--color-text);
+        line-height: 1.7;
+      }
+
+      /* Video Background */
+      #background-video {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Memastikan video menutupi seluruh area */
+        z-index: -1; /* Pastikan video berada di belakang konten lainnya */
+      }
+
+      nav {
+        padding: 0.3rem 0;
+        transition: 0.3s ease-in-out;
+      }
+
+      .nav-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: var(--width-lg);
+        margin: 0 auto;
+      }
+
+      .navlist {
+        display: flex;
+        gap: 2rem;
+      }
+
+      .navlist li a {
+        text-transform: capitalize;
+        font-weight: 500;
+        color: var(--color-text);
+        transition: color 0.3s;
+      }
+
+      .navlist li a:hover {
+        color: var(--color-tertiary);
+      }
+
+      .logo {
+        font-weight: 700;
+        font-size: 1.5rem;
+        text-transform: uppercase;
+        color: var(--color-text);
+      }
+
+      .search {
+        padding: 2rem 0;
+        text-align: center;
+      }
+
+      .search-container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .search-bar {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+      }
+
+      #search-input {
+        width: 70%;
+        padding: 0.5rem;
+        border: 1px solid var(--color-tertiary);
+        border-radius: 0.5rem;
+        margin-right: 0.5rem;
+      }
+
+      #search-button {
+        padding: 0.5rem 1rem;
+        background-color: var(--color-tertiary);
+        color: white;
+        border: none;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      #search-button:hover {
+        background-color: darken(var(--color-tertiary), 10%);
+      }
+
+      .location-filter {
+        margin-bottom: 2rem;
+      }
+
+      .photographers {
+        padding: 2rem 0;
+      }
+
+      .photographers-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1.5rem;
+      }
+
+      .photographer-card {
+        background: #030517;
+        border-radius: 0.5rem;
+        box-shadow: var(--shadow);
+        margin: 20px;
+        padding: 1rem;
+        text-align: center;
+        width: 220px; /* Atur lebar maksimum untuk setiap kartu */
+        transition: transform 0.3s;
+      }
+
+      .photographer-card:hover {
+        transform: scale(1.05);
+      }
+
+      .photographer-card img {
+        width: 100%;
+        height: auto;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .photographer-card h3 {
+        font-size: 1.2rem;
+        margin: 0.5rem 0;
+      }
+
+      .photographer-card p {
+        margin: 0.3rem 0;
+      }
+
+      .btn {
+        padding: 0.5rem 1rem;
+        background-color: var(--color-tertiary);
+        color: white;
+        border: none;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .btn:hover {
+        background-color: darken(var(--color-tertiary), 10%);
+      }
+
+      .photography-types {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin: 2rem 0;
+      }
+
+      .photography-type-btn {
+        padding: 0.5rem 1rem;
+        background-color: var(--color-tertiary);
+        color: white;
+        border: none;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .photography-type-btn:hover {
+        background-color: darken(var(--color-tertiary), 10%);
+      }
+
+      .copyright {
+        text-align: center;
+        padding: 1rem 0;
+        background: var(--color-bg);
+        color: var(--color-text);
+      }
+
+      /* ======================================================
+                RESPONSIVE STYLES
+        =========================================================*/
+      @media (max-width: 768px) {
+        .navlist {
+          flex-direction: column;
+          position: absolute;
+          top: 60px;
+          right: 0;
+          background: var(--color-bg);
+          width: 100%;
+          display: none;
+        }
+
+        .navlist.active {
+          display: flex;
+        }
+
+        #search-input {
+          width: 60%;
+        }
+
+        .photographer-card {
+          width: 90%; /* Lebar kartu fotografer pada layar kecil */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <video id="background-video" autoplay loop muted>
+      <source src="assets/images/bg2.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+
+    <nav>
+      <div class="container nav-container">
+        <a href="index.html" class="logo">Lens<span>Photography</span></a>
+        <ul class="navlist">
+          <li><a href="index.html">home</a></li>
+          <li><a href="#about">about</a></li>
+          <li><a href="#services">services</a></li>
+          <li><a href="#portfolio">portfolio</a></li>
+          <li><a href="#testimonial">testimonial</a></li>
+          <li><a href="#contact">contact</a></li>
+          <li><a href="search-results.html">Hasil Pencarian</a></li>
+        </ul>
+        <div class="nav-icons">
+          <div id="theme-btn" class="ri-moon-line"></div>
+          <div id="menu-btn" class="ri-menu-line"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section class="search" id="search">
+      <div class="container search-container">
+        <h2>Hasil Pencarian</h2>
+        <div class="search-bar">
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Cari fotografer..."
+          />
+          <button id="search-button">Cari</button>
+        </div>
+        <div class="location-filter">
+          <label for="location">Lokasi:</label>
+          <select id="location">
+            <option value="all">Semua</option>
+            <option value="aceh">Aceh</option>
+            <option value="bali">Bali</option>
+            <option value="banten">Banten</option>
+            <option value="bengkulu">Bengkulu</option>
+            <option value="yogyakarta">DI Yogyakarta</option>
+            <option value="jakarta">DKI Jakarta</option>
+            <option value="gorontalo">Gorontalo</option>
+            <option value="jambi">Jambi</option>
+            <option value="jawa-barat">Jawa Barat</option>
+            <option value="jawa-tengah">Jawa Tengah</option>
+            <option value="jawa-timur">Jawa Timur</option>
+            <option value="kalimantan-barat">Kalimantan Barat</option>
+            <option value="kalimantan-selatan">Kalimantan Selatan</option>
+            <option value="kalimantan-tengah">Kalimantan Tengah</option>
+            <option value="kalimantan-timur">Kalimantan Timur</option>
+            <option value="kepulauan-bangka-belitung">
+              Kepulauan Bangka Belitung
+            </option>
+            <option value="kepulauan-riau">Kepulauan Riau</option>
+            <option value="lampung">Lampung</option>
+            <option value="maluku">Maluku</option>
+            <option value="maluku-utara">Maluku Utara</option>
+            <option value="nusa-tenggara-barat">Nusa Tenggara Barat</option>
+            <option value="nusa-tenggara-timur">Nusa Tenggara Timur</option>
+            <option value="papua">Papua</option>
+            <option value="papua-barat">Papua Barat</option>
+            <option value="riau">Riau</option>
+            <option value="sulawesi-barat">Sulawesi Barat</option>
+            <option value="sulawesi-selatan">Sulawesi Selatan</option>
+            <option value="sulawesi-tengah">Sulawesi Tengah</option>
+            <option value="sulawesi-utara">Sulawesi Utara</option>
+            <option value="sumatera-barat">Sumatera Barat</option>
+            <option value="sumatera-selatan">Sumatera Selatan</option>
+            <option value="sumatera-utara">Sumatera Utara</option>
+          </select>
+        </div>
+        <div class="photography-types">
+          <a href="wedding-photographers copy 2.html">
+            <button class="photography-type-btn">Wedding</button>
+          </a>
+          <a href="Graduation-photographers copy.html">
+            <button class="photography-type-btn">Graduation</button>
+          </a>
+          <a href="Potrait-photographers.html">
+            <button class="photography-type-btn">Portrait</button>
+          </a>
+          <a href="Corporate-photographers copy 3.html">
+            <button class="photography-type-btn">Corporate</button>
+          </a>
+          <a href="Sport-photographers copy 3.html">
+            <button class="photography-type-btn">Sport</button>
+          </a>
+          <a href="Product-photographers copy 4.html">
+            <button class="photography-type-btn">Product</button>
+          </a>
+          <a href="Fashion-photographers copy 5.html">
+            <button class="photography-type-btn">Fashion</button>
+          </a>
+          <a href="Event-photographers copy 3.html">
+            <button class="photography-type-btn">Event</button>
+          </a>
+          <a href="Food-photographers copy 4.html">
+            <button class="photography-type-btn">Food</button>
+          </a>
+          <a href="Travel-photographers copy 3.html">
+            <button class="photography-type-btn">Travel</button>
+          </a>
+          <a href="Commercial-photographers copy 4.html">
+            <button class="photography-type-btn">Commercial</button>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="photographers" id="photographers">
+      <div class="container photographers-container">
+        <!-- Wedding Photographers -->
+        <div class="photographer-card wedding">
+          <img src="assets/images/4.png" alt="Wedding Photographer 1" />
+          <h3>Fotografer Wedding 1</h3>
+          <p>Tipe: Wedding</p>
+          <p>Lokasi: Bandar Lampung</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card wedding">
+          <img src="assets/images/4.png" alt="Wedding Photographer 2" />
+          <h3>Fotografer Wedding 2</h3>
+          <p>Tipe: Wedding</p>
+          <p>Lokasi: Jakarta</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card wedding">
+          <img src="assets/images/4.png" alt="Wedding Photographer 3" />
+          <h3>Fotografer Wedding 3</h3>
+          <p>Tipe: Wedding</p>
+          <p>Lokasi: Surabaya</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card wedding">
+          <img src="assets/images/4.png" alt="Wedding Photographer 4" />
+          <h3>Fotografer Wedding 4</h3>
+          <p>Tipe: Wedding</p>
+          <p>Lokasi: Bali</p>
+          <button class="btn">Lihat Profil</button>
+        </div>
+        <div class="photographer-card wedding">
+          <img src="assets/images/4.png" alt="Wedding Photographer 5" />
+          <h3>Fotografer Wedding 5</h3>
+          <p>Tipe: Wedding</p>
+          <p>Lokasi: Jakarta</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+
+        <!-- Graduation Photographers -->
+        <div class="photographer-card graduation">
+          <img src="assets/images/4.png" alt="Graduation Photographer 1" />
+          <h3>Fotografer Graduation 1</h3>
+          <p>Tipe: Graduation</p>
+          <p>Lokasi: Jakarta</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card graduation">
+          <img src="assets/images/4.png" alt="Graduation Photographer 2" />
+          <h3>Fotografer Graduation 2</h3>
+          <p>Tipe: Graduation</p>
+          <p>Lokasi: Surabaya</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card graduation">
+          <img src="assets/images/4.png" alt="Graduation Photographer 3" />
+          <h3>Fotografer Graduation 3</h3>
+          <p>Tipe: Graduation</p>
+          <p>Lokasi: Bali</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card graduation">
+          <img src="assets/images/4.png" alt="Graduation Photographer 4" />
+          <h3>Fotografer Graduation 4</h3>
+          <p>Tipe: Graduation</p>
+          <p>Lokasi: Jakarta</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card graduation">
+          <img src="assets/images/4.png" alt="Graduation Photographer 5" />
+          <h3>Fotografer Graduation 5</h3>
+          <p>Tipe: Graduation</p>
+          <p>Lokasi: Surabaya</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+
+        <!-- Portrait Photographers -->
+        <div class="photographer-card portrait">
+          <img src="assets/images/4.png" alt="Portrait Photographer 1" />
+          <h3>Fotografer Portrait 1</h3>
+          <p>Tipe: Portrait</p>
+          <p>Lokasi: Jakarta</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card portrait">
+          <img src="assets/images/4.png" alt="Portrait Photographer 2" />
+          <h3>Fotografer Portrait 2</h3>
+          <p>Tipe: Portrait</p>
+          <p>Lokasi: Surabaya</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card portrait">
+          <img src="assets/images/4.png" alt="Portrait Photographer 3" />
+          <h3>Fotografer Portrait 3</h3>
+          <p>Tipe: Portrait</p>
+          <p>Lokasi: Bali</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card portrait">
+          <img src="assets/images/4.png" alt="Portrait Photographer 4" />
+          <h3>Fotografer Portrait 4</h3>
+          <p>Tipe: Portrait</p>
+          <p>Lokasi: Jakarta</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card portrait">
+          <img src="assets/images/4.png" alt="Portrait Photographer 5" />
+          <h3>Fotografer Portrait 5</h3>
+          <p>Tipe: Portrait</p>
+          <p>Lokasi: Surabaya</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+
+        <!-- Corporate Photographers -->
+        <div class="photographer-card corporate">
+          <img src="assets/images/4.png" alt="Corporate Photographer 1" />
+          <h3>Fotografer Corporate 1</h3>
+          <p>Tipe: Corporate</p>
+          <p>Lokasi: Jakarta</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card corporate">
+          <img src="assets/images/4.png" alt="Corporate Photographer 2" />
+          <h3>Fotografer Corporate 2</h3>
+          <p>Tipe: Corporate</p>
+          <p>Lokasi: Surabaya</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card corporate">
+          <img src="assets/images/4.png" alt="Corporate Photographer 3" />
+          <h3>Fotografer Corporate 3</h3>
+          <p>Tipe: Corporate</p>
+          <p>Lokasi: Bali</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card corporate">
+          <img src="assets/images/4.png" alt="Corporate Photographer 4" />
+          <h3>Fotografer Corporate 4</h3>
+          <p>Tipe: Corporate</p>
+          <p>Lokasi: Jakarta</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card corporate">
+          <img src="assets/images/4.png" alt="Corporate Photographer 5" />
+          <h3>Fotografer Corporate 5</h3>
+          <p>Tipe: Corporate</p>
+          <p>Lokasi: Surabaya</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+
+        <!-- Sport Photographers -->
+        <div class="photographer-card sport">
+          <img src="assets/images/1.png" alt="Sport Photographer 1" />
+          <h3>Fotografer Sport 1</h3>
+          <p>Tipe: Sport</p>
+          <p>Lokasi: Jakarta</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card sport">
+          <img src="assets/images/2.png" alt="Sport Photographer 2" />
+          <h3>Fotografer Sport 2</h3>
+          <p>Tipe: Sport</p>
+          <p>Lokasi: Surabaya</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card sport">
+          <img src="assets/images/2.png" alt="Sport Photographer 3" />
+          <h3>Fotografer Sport 3</h3>
+          <p>Tipe: Sport</p>
+          <p>Lokasi: Bali</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card sport">
+          <img src="assets/images/2.png" alt="Sport Photographer 4" />
+          <h3>Fotografer Sport 4</h3>
+          <p>Tipe: Sport</p>
+          <p>Lokasi: Jakarta</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card sport">
+          <img src="assets/images/2.png" alt="Sport Photographer 5" />
+          <h3>Fotografer Sport 5</h3>
+          <p>Tipe: Sport</p>
+          <p>Lokasi: Surabaya</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+
+        <!-- Product Photographers -->
+        <div class="photographer-card product">
+          <img src="assets/images/2.png" alt="Product Photographer 1" />
+          <h3>Fotografer Product 1</h3>
+          <p>Tipe: Product</p>
+          <p>Lokasi: Jakarta</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card product">
+          <img src="assets/images/2.png" alt="Product Photographer 2" />
+          <h3>Fotografer Product 2</h3>
+          <p>Tipe: Product</p>
+          <p>Lokasi: Surabaya</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card product">
+          <img src="assets/images/2.png" alt="Product Photographer 3" />
+          <h3>Fotografer Product 3</h3>
+          <p>Tipe: Product</p>
+          <p>Lokasi: Bali</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card product">
+          <img src="assets/images/2.png" alt="Product Photographer 4" />
+          <h3>Fotografer Product 4</h3>
+          <p>Tipe: Product</p>
+          <p>Lokasi: Jakarta</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card product">
+          <img src="assets/images/2.png" alt="Product Photographer 5" />
+          <h3>Fotografer Product 5</h3>
+          <p>Tipe: Product</p>
+          <p>Lokasi: Surabaya</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+
+        <!-- Fashion Photographers -->
+        <div class="photographer-card fashion">
+          <img src="assets/images/2.png" alt="Fashion Photographer 1" />
+          <h3>Fotografer Fashion 1</h3>
+          <p>Tipe: Fashion</p>
+          <p>Lokasi: Jakarta</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card fashion">
+          <img src="assets/images/2.png" alt="Fashion Photographer 2" />
+          <h3>Fotografer Fashion 2</h3>
+          <p>Tipe: Fashion</p>
+          <p>Lokasi: Surabaya</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card fashion">
+          <img src="assets/images/2.png" alt="Fashion Photographer 3" />
+          <h3>Fotografer Fashion 3</h3>
+          <p>Tipe: Fashion</p>
+          <p>Lokasi: Bali</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card fashion">
+          <img src="assets/images/2.png" alt="Fashion Photographer 4" />
+          <h3>Fotografer Fashion 4</h3>
+          <p>Tipe: Fashion</p>
+          <p>Lokasi: Jakarta</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card fashion">
+          <img src="assets/images/2.png" alt="Fashion Photographer 5" />
+          <h3>Fotografer Fashion 5</h3>
+          <p>Tipe: Fashion</p>
+          <p>Lokasi: Surabaya</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+
+        <!-- Event Photographers -->
+        <div class="photographer-card event">
+          <img src="assets/images/2.png" alt="Event Photographer 1" />
+          <h3>Fotografer Event 1</h3>
+          <p>Tipe: Event</p>
+          <p>Lokasi: Jakarta</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card event">
+          <img src="assets/images/2.png" alt="Event Photographer 2" />
+          <h3>Fotografer Event 2</h3>
+          <p>Tipe: Event</p>
+          <p>Lokasi: Surabaya</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card event">
+          <img src="assets/images/2.png" alt="Event Photographer 3" />
+          <h3>Fotografer Event 3</h3>
+          <p>Tipe: Event</p>
+          <p>Lokasi: Bali</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card event">
+          <img src="assets/images/2.png" alt="Event Photographer 4" />
+          <h3>Fotografer Event 4</h3>
+          <p>Tipe: Event</p>
+          <p>Lokasi: Jakarta</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card event">
+          <img src="assets/images/2.png" alt="Event Photographer 5" />
+          <h3>Fotografer Event 5</h3>
+          <p>Tipe: Event</p>
+          <p>Lokasi: Surabaya</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+
+        <!-- Food Photographers -->
+        <div class="photographer-card food">
+          <img src="assets/images/2.png" alt="Food Photographer 1" />
+          <h3>Fotografer Food 1</h3>
+          <p>Tipe: Food</p>
+          <p>Lokasi: Jakarta</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card food">
+          <img src="assets/images/2.png" alt="Food Photographer 2" />
+          <h3>Fotografer Food 2</h3>
+          <p>Tipe: Food</p>
+          <p>Lokasi: Surabaya</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card food">
+          <img src="assets/images/2.png" alt="Food Photographer 3" />
+          <h3>Fotografer Food 3</h3>
+          <p>Tipe: Food</p>
+          <p>Lokasi: Bali</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card food">
+          <img src="assets/images/2.png" alt="Food Photographer 4" />
+          <h3>Fotografer Food 4</h3>
+          <p>Tipe: Food</p>
+          <p>Lokasi: Jakarta</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card food">
+          <img src="assets/images/2.png" alt="Food Photographer 5" />
+          <h3>Fotografer Food 5</h3>
+          <p>Tipe: Food</p>
+          <p>Lokasi: Surabaya</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+
+        <!-- Travel Photographers -->
+        <div class="photographer-card travel">
+          <img src="assets/images/2.png" alt="Travel Photographer 1" />
+          <h3>Fotografer Travel 1</h3>
+          <p>Tipe: Travel</p>
+          <p>Lokasi: Jakarta</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card travel">
+          <img src="assets/images/2.png" alt="Travel Photographer 2" />
+          <h3>Fotografer Travel 2</h3>
+          <p>Tipe: Travel</p>
+          <p>Lokasi: Surabaya</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card travel">
+          <img src="assets/images/2.png" alt="Travel Photographer 3" />
+          <h3>Fotografer Travel 3</h3>
+          <p>Tipe: Travel</p>
+          <p>Lokasi: Bali</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card travel">
+          <img src="assets/images/2.png" alt="Travel Photographer 4" />
+          <h3>Fotografer Travel 4</h3>
+          <p>Tipe: Travel</p>
+          <p>Lokasi: Jakarta</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card travel">
+          <img src="assets/images/2.png" alt="Travel Photographer 5" />
+          <h3>Fotografer Travel 5</h3>
+          <p>Tipe: Travel</p>
+          <p>Lokasi : Surabaya</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+
+        <!-- Commercial Photographers -->
+        <div class="photographer-card commercial">
+          <img src="assets/images/2.png" alt="Commercial Photographer 1" />
+          <h3>Fotografer Commercial 1</h3>
+          <p>Tipe: Commercial</p>
+          <p>Lokasi: Jakarta</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card commercial">
+          <img src="assets/images/2.png" alt="Commercial Photographer 2" />
+          <h3>Fotografer Commercial 2</h3>
+          <p>Tipe: Commercial</p>
+          <p>Lokasi: Surabaya</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card commercial">
+          <img src="assets/images/2.png" alt="Commercial Photographer 3" />
+          <h3>Fotografer Commercial 3</h3>
+          <p>Tipe: Commercial</p>
+          <p>Lokasi: Bali</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card commercial">
+          <img src="assets/images/2.png" alt="Commercial Photographer 4" />
+          <h3>Fotografer Commercial 4</h3>
+          <p>Tipe: Commercial</p>
+          <p>Lokasi: Jakarta</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+        <div class="photographer-card commercial">
+          <img src="assets/images/2.png" alt="Commercial Photographer 5" />
+          <h3>Fotografer Commercial 5</h3>
+          <p>Tipe: Commercial</p>
+          <p>Lokasi: Surabaya</p>
+          <a href="profil.html" class="btn">Lihat Profil</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="copyright">
+      <p>Copyright &copy; 2024 by lensphotography | All right Reserved.</p>
+    </div>
+
+    <script src="assets/js/script.js"></script>
+    <script>
+      const menuBtn = document.getElementById("menu-btn");
+      const navList = document.querySelector(".navlist");
+
+      menuBtn.addEventListener("click", () => {
+        navList.classList.toggle("active");
+      });
+
+      function filterPhotographers(type) {
+        const cards = document.querySelectorAll(".photographer-card");
+        cards.forEach((card) => {
+          if (card.classList.contains(type)) {
+            card.style.display = "block";
+          } else {
+            card.style.display = "none";
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <title>Hasil Pencarian - Lens Photography</title>
+  </head>
+  <body>
+    <nav>
+      <div class="container nav-container">
+        <a href="index.html" class="logo">Lens<span>Photography</span></a>
+        <ul class="navlist">
+          <li><a href="index.html">home</a></li>
+          <li><a href="#about">about</a></li>
+          <li><a href="#services">services</a></li>
+          <li><a href="#portfolio">portfolio</a></li>
+          <li><a href="#testimonial">testimonial</a></li>
+          <li><a href="#contact">contact</a></li>
+        </ul>
+        <div class="nav-icons">
+          <div id="theme-btn" class="ri-moon-line"></div>
+          <div id="menu-btn" class="ri-menu-line"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section class="wedding-gallery">
+      <div class="photographer-card">
+        <img src="assets/images/4.png" alt="Photographer 1" />
+        <h3>Photographer Name 1</h3>
+        <p>Type: Product Photography</p>
+        <!-- Diubah menjadi Product -->
+        <p>Price: $1000</p>
+        <p>Location: New York</p>
+        <button class="button" onclick="window.location.href='Profil.html'">
+          View Portfolio
+        </button>
+      </div>
+      <div class="photographer-card">
+        <img src="assets/images/4.png" alt="Photographer 2" />
+        <h3>Photographer Name 2</h3>
+        <p>Type: Product Photography</p>
+        <!-- Diubah menjadi Product -->
+        <p>Price: $800</p>
+        <p>Location: Los Angeles</p>
+        <button class="button" onclick="window.location.href='Profil.html'">
+          View Portfolio
+        </button>
+      </div>
+      <div class="photographer-card">
+        <img src="assets/images/4.png" alt="Photographer 3" />
+        <h3>Photographer Name 3</h3>
+        <p>Type: Product Photography</p>
+        <!-- Diubah menjadi Product -->
+        <p>Price: $1200</p>
+        <p>Location: Chicago</p>
+        <button class="button" onclick="window.location.href='Profil.html'">
+          View Portfolio
+        </button>
+      </div>
+      <div class="photographer-card">
+        <img src="assets/images/4.png" alt="Photographer 4" />
+        <h3>Photographer Name 4</h3>
+        <p>Type: Product Photography</p>
+        <!-- Diubah menjadi Product -->
+        <p>Price: $1500</p>
+        <p>Location: Miami</p>
+        <button class="button" onclick="window.location.href='Profil.html'">
+          View Portfolio
+        </button>
+      </div>
+      <div class="photographer-card">
+        <img src="assets/images/4.png" alt="Photographer 5" />
+        <h3>Photographer Name 5</h3>
+        <p>Type: Product Photography</p>
+        <!-- Diubah menjadi Product -->
+        <p>Price: $2000</p>
+        <p>Location: San Francisco</p>
+        <button class="button" onclick="window.location.href='Profil.html'">
+          View Portfolio
+        </button>
+      </div>
+    </section>
+
+    
+
+    <style>
+      /* ======================================================
+                VARIABLES & GENERAL CSS
+          =========================================================*/
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        text-decoration: none;
+        list-style: none;
+        resize: none;
+        outline: none;
+        border: none;
+      }
+
+      :root {
+        --color-bg: #030517;
+        --color-text: #e6e3e3;
+        --color-tertiary: rgb(8, 218, 218);
+        --shadow: 6px 6px 12px #06a2ad, -6px -6px 12px #07e1de;
+        --inner-shadow: inset 6px 6px 12px #bababa, inset -6px -6px 12px #ffffff;
+        --width-lg: 80%;
+        --width-sm: 95%;
+        --transition: all 0.4s ease-in;
+      }
+
+      body {
+        font-family: "Rubik", sans-serif;
+        background: var(--color-bg);
+        color: var(--color-text);
+        line-height: 1.7;
+      }
+
+      /* ======================================================
+                NAVBAR RESPONSIVE DESIGN
+          =========================================================*/
+
+      nav {
+        padding: 0.3rem 0;
+        transition: 0.3s ease-in-out;
+      }
+
+      .nav-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: var(--width-lg);
+        margin: 0 auto;
+        flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+      }
+
+      .navlist {
+        display: flex; /* Flexbox for navigation items */
+        flex-wrap: wrap; /* Allow wrapping of items */
+        gap: 1rem; /* Space between items */
+      }
+
+      .navlist li {
+        flex: 1; /* Allow items to grow and shrink */
+        text-align: center; /* Center text */
+      }
+
+      .nav-icons {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .nav-icons div {
+        cursor: pointer;
+        color: var(--color-text);
+      }
+
+      /* ======================================================
+                WEDDING GALLERY RESPONSIVE DESIGN
+          =========================================================*/
+
+      .wedding-gallery {
+        display: flex; /* Flexbox for gallery layout */
+        flex-wrap: wrap; /* Allow wrapping of items */
+        justify-content: center; /* Center the gallery items */
+        padding: 20px; /* Padding around the gallery */
+      }
+
+      .photographer-card {
+        background-color: #030517; /* Card background color */
+        border-radius: 8px; /* Rounded corners */
+        box-shadow: var(--shadow);
+        margin: 20px; /* Margin around cards */
+        padding: 15px; /* Padding inside cards */
+        text-align: center; /* Center text inside cards */
+        width: 200px; /* Fixed width for cards */
+        flex: 1 1 200px; /* Allow cards to grow and shrink */
+      }
+
+      /* Responsive Images */
+      .photographer-card img {
+        width: 100%; /* Responsive image */
+        border-radius: 5px; /* Rounded corners for images */
+      }
+
+      /* Responsive Button */
+      .button {
+        background-color: #11c8c8;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .button:hover {
+        background-color: #0eb5b5;
+      }
+
+      /* ======================================================
+                MEDIA QUERIES FOR RESPONSIVENESS
+          =========================================================*/
+
+      @media (max-width: 768px) {
+        .navlist {
+          flex-direction: column; /* Stack navigation items vertically */
+          align-items: center; /* Center items */
+        }
+
+        .photographer-card {
+          width: 90%; /* Full width on smaller screens */
+        }
+      }
+
+      @media (max-width: 480px) {
+        .button {
+          width: 100%; /* Full width for buttons on small screens */
+        }
+      }
+    </style>
+  </body>
+</html>
